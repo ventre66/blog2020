@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @Vich\Uploadable()
  */
 class Article
 {
@@ -20,19 +22,34 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
     private $image;
 
     /**
-     * @Vich\UploadableField(mapping="article_images", fileNameProperty="image")
+     * @Vich\UploadableField(mapping="article_image", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
 
     /**
+     * @var \DateTime $updatedAt
+     *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titre;
+
+    /**
+     * @Gedmo\Slug(fields={"titre"})
+     * @ORM\Column(length = 128, unique = true)
+     */
+    private $slug;
 
     public function getId(): ?int
     {
@@ -75,10 +92,21 @@ class Article
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function getTitre(): ?string
     {
-        $this->updatedAt = $updatedAt;
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): self
+    {
+        $this->titre = $titre;
 
         return $this;
     }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
 }
