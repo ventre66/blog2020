@@ -13,6 +13,7 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('titre')
             ->add('imageFile', FileType::class, array(
                 //'data_class' => null,
                 'label' => false,
@@ -25,7 +26,6 @@ class ArticleType extends AbstractType
                     'data-allowed-file-extensions' => '["jpeg", "png", "jpg", "pdf"]',
                 )
             ))
-            ->add('titre')
         ;
     }
 
